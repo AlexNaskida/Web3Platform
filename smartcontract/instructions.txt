@@ -1,0 +1,81 @@
+## Instructions
+
+
+npm init -y
+npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
+npx hardhat init
+
+
+In scripts/deploy.js: //Create it if doesn't exist
+
+```
+const hre = require("hardhat");
+
+async function main() {
+  const SmartContract = await hre.ethers.getContractFactory("SmartContract"); //Name of the file without .sol
+  const smartContract = await SmartContract.deploy();
+
+  // Wait for the contract to be mined
+  await smartContract.waitForDeployment();
+
+  console.log("SmartContract deployed to:", await smartContract.getAddress());
+  console.log("Save this address to use in your interaction scripts!");
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+```
+
+npx hardhat compile
+npx hardhat node
+npx hardhat run scripts/deploy.js --network localhost
+
+
+
+Notes:
+npx hardhat console --network localhost
+
+const SmartContract = await ethers.getContractFactory("SmartContract")
+
+const contract = await SmartContract.attach("0x5FbDB2315678afecb367f032d93F642f64180aa3")
+
+const accounts = await ethers.getSigners()
+
+console.log(accounts)
+[
+  HardhatEthersSigner {
+    _gasLimit: 30000000,
+    address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+    provider: HardhatEthersProvider {
+      _hardhatProvider: [LazyInitializationProviderAdapter],
+      _networkName: 'localhost',
+      _blockListeners: [],
+      _transactionHashListeners: Map(0) {},
+      _eventListeners: []
+    }
+  },
+  HardhatEthersSigner {
+    _gasLimit: 30000000,
+    address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+    provider: HardhatEthersProvider {
+      _hardhatProvider: [LazyInitializationProviderAdapter],
+      _networkName: 'localhost',
+      _blockListeners: [],
+      _transactionHashListeners: Map(0) {},
+      _eventListeners: []
+    }
+  },
+  HardhatEthersSigner {
+    _gasLimit: 30000000,
+    address: '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC',
+    provider: HardhatEthersProvider {
+      _hardhatProvider: [LazyInitializationProviderAdapter],
+      _networkName: 'localhost',
+      _blockListeners: [],
+      _transactionHashListeners: Map(0) {},
+      _eventListeners: []
+    }
+  }
+]
