@@ -17,8 +17,8 @@ const CryptoWallet = ({
   connectWalletHandler,
 }: CryptoWalletProps) => {
   return (
-    <div className="flex flex-row h-96 pr-10 w-full justify-between">
-      <div className="flex flex-col w-full bg-primary rounded-xl justify-center items-center text-black">
+    <div className="flex flex-row h-72 pr-10 w-full justify-between">
+      <div className="flex flex-col w-full h-full bg-primary rounded-xl text-black">
         {walletConnected ? (
           <>
             <DisplayWalletCard
@@ -28,10 +28,10 @@ const CryptoWallet = ({
             />
           </>
         ) : (
-          <div className="flex items-center justify-center h-20">
+          <div className="flex h-full items-center justify-center">
             <Button
               onClick={() => connectWalletHandler()}
-              className="bg-orange-600 text-xl font-semibold px-4 py-2 rounded-xl"
+              className="bg-white text-xl font-semibold px-4 py-2 rounded-xl"
             >
               Connect Wallet
             </Button>

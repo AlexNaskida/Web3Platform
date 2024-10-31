@@ -11,23 +11,39 @@ type SideBarButtons = {
 const SideMenu = (props: SideBarButtons) => {
   const { to, text, icon } = props;
 
-  const content = (
-    <div className="flex flex-row text-black items-center px-3 py-2 gap-2">
-      <div className="flex justify-center items-center text-white size-10 bg-primary rounded-full border border-primary">
-        {icon}
-      </div>
-      <p className="text-black text-xl font-medium">{text}</p>
-    </div>
-  );
-
   return (
     <NavLink
       to={to}
       className={({ isActive }: { isActive: boolean }) =>
-        cn(isActive ? "bg-slate-200 rounded-md" : "bg-white rounded-md")
+        cn(
+          isActive
+            ? "bg-slate-200 rounded-md"
+            : "bg-white rounded-md hover:bg-slate-100"
+        )
       }
     >
-      {content}
+      {({ isActive }: { isActive: boolean }) => (
+        <div className="flex flex-row items-center px-3 py-2 gap-2">
+          <div
+            className={cn(
+              "flex justify-center items-center size-10 rounded-full border",
+              isActive
+                ? "bg-primary text-white border-primary"
+                : "bg-white text-black border-white"
+            )}
+          >
+            {icon}
+          </div>
+          <p
+            className={cn(
+              "text-xl font-medium",
+              isActive ? "text-black" : "text-gray-600"
+            )}
+          >
+            {text}
+          </p>
+        </div>
+      )}
     </NavLink>
   );
 };

@@ -60,7 +60,7 @@ const MainPage = () => {
       connected: connected,
     };
 
-    console.log(walletData);
+    // console.log(walletData);
     localStorage.setItem("walletData", JSON.stringify(walletData));
   };
 
@@ -93,7 +93,7 @@ const MainPage = () => {
 
   const getUserBalance = async (address: string) => {
     if (!window.ethereum) {
-      console.log("MetaMask is not installed");
+      console.log("Error while connecting Metamask. MetaMask is not installed");
       return;
     }
     try {
@@ -101,9 +101,8 @@ const MainPage = () => {
         method: "eth_getBalance",
         params: [address, "latest"],
       });
-      console.log("Balance:", balance);
 
-      console.log("Balance:", balance);
+      // console.log("Balance:", balance);
       setWalletBalance(ethers.formatUnits(balance));
       setWalletConnected(true);
       setWallet({
@@ -131,7 +130,7 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-full bg-foreground overflow-y-hidden">
+    <div className="flex flex-row w-full h-full  overflow-y-hidden">
       <div className="flex flex-col gap-10 w-full h-full py-4 px-10">
         <MainHeader />
         <div className="flex flex-row h-full">
@@ -153,6 +152,7 @@ const MainPage = () => {
 
 export default MainPage;
 
+///temp code
 {
   /* <div className="flex flex-col items-center justify-center gap-6">
           <Input

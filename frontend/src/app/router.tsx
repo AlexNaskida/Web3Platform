@@ -2,7 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 
 import CoreLayout from "@/views/Core/Sidebar/Layout";
 
-import MainPage from "@/views/Core/MainPages/MainPage";
+import MainPage from "@/views/MainPage/MainPage";
+
+import Login from "@/views/Login/Login";
 
 import NotFound from "@/views/Error/NotFound";
 
@@ -16,6 +18,7 @@ export const router = createBrowserRouter([
         path: "/",
         element: <MainPage />,
       },
+
       // {
       //   path: "/crypto-trading",
       //   element: <CryptoTranding />,
@@ -25,6 +28,10 @@ export const router = createBrowserRouter([
       //   element: <NFTAlbum />,
       // },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
