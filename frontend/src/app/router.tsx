@@ -5,6 +5,7 @@ import CoreLayout from "@/views/Core/Sidebar/Layout";
 import MainPage from "@/views/MainPage/MainPage";
 
 import Login from "@/views/Login/Login";
+import Register from "@/views/Register/Register";
 
 import NotFound from "@/views/Error/NotFound";
 
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 

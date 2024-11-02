@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import { Toaster } from "@/components/ui/toaster";
 // import TweetCard from "@/components/Cards/TweetCard";
 // import BurnTokens from "@/components/BurnTokens";
 // import { handleTweetCreation } from "@/components/handleFunctions/handleTweetCreation";
@@ -130,7 +131,10 @@ const MainPage = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-full  overflow-y-hidden">
+    <div className="flex flex-row w-full h-full overflow-y-hidden">
+      <div className="flex justify-center items-center h-20">
+        <Toaster />
+      </div>
       <div className="flex flex-col gap-10 w-full h-full py-4 px-10">
         <MainHeader />
         <div className="flex flex-row h-full">
