@@ -1,4 +1,5 @@
 import SideMenu from "@/components/Button/SideMenu";
+import Logout from "@/views/Auth/Logout";
 import {
   LayoutGrid,
   Settings,
@@ -19,28 +20,35 @@ const Sidebar = () => {
         </div>
       </Link>
       {/* <Separator /> */}
-      <div className="flex flex-col gap-5">
-        <SideMenu
-          to="/"
-          text="Dashboard"
-          icon={<LayoutGrid size={22} strokeWidth={2.5} />}
-        />
-        <SideMenu
-          to="/crypto"
-          text="Crypto Trading"
-          icon={<AlignHorizontalDistributeCenter size={22} strokeWidth={2.5} />}
-        />
-        <SideMenu
-          to="/nft"
-          text="NFT Album"
-          icon={<Folder size={22} strokeWidth={2.5} />}
-        />
+      <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col gap-5">
+          <SideMenu
+            to="/"
+            text="Dashboard"
+            icon={<LayoutGrid size={22} strokeWidth={2.5} />}
+          />
+          <SideMenu
+            to="/crypto"
+            text="Crypto Trading"
+            icon={
+              <AlignHorizontalDistributeCenter size={22} strokeWidth={2.5} />
+            }
+          />
+          <SideMenu
+            to="/nft"
+            text="NFT Album"
+            icon={<Folder size={22} strokeWidth={2.5} />}
+          />
 
-        <SideMenu
-          to="/settings"
-          text="Settings"
-          icon={<Settings size={22} strokeWidth={2.5} />}
-        />
+          <SideMenu
+            to="/settings"
+            text="Settings"
+            icon={<Settings size={22} strokeWidth={2.5} />}
+          />
+        </div>
+        <div className="pb-5">
+          <Logout />
+        </div>
       </div>
     </div>
   );

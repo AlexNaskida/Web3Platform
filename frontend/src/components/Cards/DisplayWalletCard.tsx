@@ -7,11 +7,13 @@ type DisplayWalletCardProps = {
   walletBalanceInUSD: string;
   walletAddress: string;
   walletBalance: string;
+  alexTokenBalance: string;
 };
 
 const DisplayWalletCard = ({
   walletAddress,
   walletBalance,
+  alexTokenBalance,
   walletBalanceInUSD,
 }: DisplayWalletCardProps) => {
   const [walletCopied, setWalletCopied] = useState<boolean>(false);
@@ -26,10 +28,13 @@ const DisplayWalletCard = ({
   };
 
   const formatCryptoBalaceNumber = (cryptoAmount: string) => {
-    // const parts = cryptoAmount.split(".");
-    // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // return parts[0];
-    return `${cryptoAmount.slice(0, 6)}`;
+    const decimalIndex = cryptoAmount.indexOf(".");
+
+    if (decimalIndex !== -1) {
+      return `${cryptoAmount.slice(0, decimalIndex + 3)}`;
+    }
+
+    return cryptoAmount.slice(0, 6);
   };
 
   const CopyWalletAddress = () => {
@@ -39,9 +44,19 @@ const DisplayWalletCard = ({
   };
 
   const CryptoStoredInWallet = [
-    { crypto: "Ethereum", amount: walletBalance, icon: "" },
-    { crypto: "crypto-two", amount: "Crypto Two", icon: "" },
-    { crypto: "crypto-third", amount: "Crypto Third", icon: "" },
+    { crypto: "Ethereum", amount: walletBalance, currency: "ETH", icon: "" },
+    {
+      crypto: "Alex Token",
+      amount: alexTokenBalance,
+      currency: "AT",
+      icon: "",
+    },
+    {
+      crypto: "crypto-third",
+      amount: "100",
+      currency: "ETH",
+      icon: "",
+    },
   ];
 
   return (
@@ -83,7 +98,7 @@ const DisplayWalletCard = ({
                   <p className="text-lg text-white">{crypto.crypto}</p>
                 </div>
                 <p className="text-lg text-white">
-                  {formatCryptoBalaceNumber(crypto.amount)} ETH
+                  {formatCryptoBalaceNumber(crypto.amount)} {crypto.currency}
                 </p>
 
                 {index < CryptoStoredInWallet.length - 1 && (

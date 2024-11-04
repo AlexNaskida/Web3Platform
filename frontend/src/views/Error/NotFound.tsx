@@ -7,7 +7,7 @@ const NotFound = () => {
     <div className="flex h-screen w-full flex-col items-center justify-center font-medium">
       <div className="flex flex-col items-center h-2/3">
         <span className="text-primary font-bold text-9xl">404</span>
-        <span className="mt-6 pb-6">Page not found</span>
+        <span className="text-primary mt-6 pb-6">Page not found</span>
         <Button className="h-12 bg-primary py-2 px-10">
           <Link to="/">
             <div className="flex flex-col justify-center items-center">

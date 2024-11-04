@@ -1,11 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
+// import AuthLayout from "@/views/Auth/Layout";
 import CoreLayout from "@/views/Core/Sidebar/Layout";
 
 import MainPage from "@/views/MainPage/MainPage";
 
-import Login from "@/views/Login/Login";
-import Register from "@/views/Register/Register";
+import Login from "@/views/Auth/Login";
+import Register from "@/views/Auth/Register";
 
 import NotFound from "@/views/Error/NotFound";
 
@@ -30,13 +31,27 @@ export const router = createBrowserRouter([
       // },
     ],
   },
+  // {
+  //   path: "/login",
+  //   element: <AuthLayout />,
+  //   errorElement: <NotFound />,
+  //   children: [{ index: true, element: <Login /> }],
+  // },
+  // {
+  //   path: "/register",
+  //   element: <AuthLayout />,
+  //   errorElement: <NotFound />,
+  //   children: [{ index: true, element: <Register /> }],
+  // },
   {
     path: "/login",
     element: <Login />,
+    errorElement: <NotFound />,
   },
   {
     path: "/register",
     element: <Register />,
+    errorElement: <NotFound />,
   },
 ]);
 

@@ -1,38 +1,33 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Toaster } from "@/components/ui/toaster";
-// import TweetCard from "@/components/Cards/TweetCard";
-// import BurnTokens from "@/components/BurnTokens";
-// import { handleTweetCreation } from "@/components/handleFunctions/handleTweetCreation";
-// import CryptoPriceCards from "@/components/Cards/CryptoPriceCards";
+import { useToast } from "@/hooks/use-toast";
+
 import RightSideBar from "@/views/MainPage/RightSideBar";
-import MainHeader from "@/views/MainPage/components/MainHeader";
-import CryptoWallet from "@/views/MainPage/components/CryptoWallet";
+import MainHeader from "@/views/MainPage/MainHeader";
+import CryptoWallet from "@/views/MainPage/components/Wallet/CryptoWallet";
+import { alexToken } from "@/constants/constant";
 
-// type TweetDictionaryItem = {
-//   0: string;
-//   1: string;
-//   2: bigint;
-//   author: string;
-//   content: string;
-//   timestamp: number;
-// };
-
-type WalletData = {
+// remember this issue here:
+// how will the react know if for exmaple user has 200 tokens and then someone sent 100 tokens to current user to the wallet. How should i identify this balance change
+export type WalletData = {
   address: string;
-  balance: string;
+  // balanceInEth: string;
+  // balanceInAlexToken: string;
   connected: boolean;
 };
 
 const MainPage = () => {
-  // const [tweetDictionary, setTweetDictionary] = useState<TweetDictionaryItem[]>(
-  //   []
-  // );
-  // const [tweetMessage, setTweetMessage] = useState<string>("");
+  const { toast } = useToast();
   const [walletConnected, setWalletConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string>("");
+
   const [walletBalance, setWalletBalance] = useState<string>("");
+  const [alexTokenBalance, setAlexTokenBalance] = useState<string>("");
+
   const [ethPriceInUSD, setEthPriceInUSD] = useState<number>(0);
+  const [alexTokenPriceInUSD, setAlexTokenPriceInUSD] = useState<number>(0);
+
   const [walletBalanceInUSD, setWalletBalanceInUSD] = useState<string>("");
 
   useEffect(() => {
@@ -40,34 +35,47 @@ const MainPage = () => {
     if (storedWalletData) {
       const parsedWalletData: WalletData = JSON.parse(storedWalletData);
       setWalletAddress(parsedWalletData.address);
-      setWalletBalance(parsedWalletData.balance);
-      setWalletConnected(parsedWalletData.connected);
+      // setWalletBalance(parsedWalletData.balanceInEth);
+      // setAlexTokenBalance(parsedWalletData.balanceInAlexToken);
+      setWalletConnected(parsedWalletData.connected); // Problem here
+
+      getWalletBalance(parsedWalletData.address);
+      getAlexTokenBalance(parsedWalletData.address);
+      fetchCryptoPricesInUSD();
     }
-    fetchEthPriceInUSD();
   }, []);
 
   useEffect(() => {
-    if (walletBalance && ethPriceInUSD) {
-      const balanceInEth = parseFloat(walletBalance);
-      const valueInUSD = balanceInEth * ethPriceInUSD;
-      setWalletBalanceInUSD(valueInUSD.toFixed(2));
-    }
-  }, [walletBalance, ethPriceInUSD]);
+    const balanceInEth = parseFloat(walletBalance);
+    const ethValueInUSD = balanceInEth * ethPriceInUSD;
 
-  const setWallet = ({ address, balance, connected }: WalletData) => {
-    const walletData: WalletData = {
-      address: address,
-      balance: balance,
-      connected: connected,
-    };
+    const balanceInAlexToken = parseFloat(alexTokenBalance);
 
-    // console.log(walletData);
-    localStorage.setItem("walletData", JSON.stringify(walletData));
-  };
+    const alexTokenValueInUSD = balanceInAlexToken * alexTokenPriceInUSD;
+    const totalBalanceInUSD = ethValueInUSD + alexTokenValueInUSD;
+
+    setWalletBalanceInUSD(totalBalanceInUSD.toFixed(2));
+  }, [walletBalance, alexTokenBalance, ethPriceInUSD, alexTokenPriceInUSD]);
 
   if (window.ethereum) {
     window.ethereum.on("accountsChanged", () => connectWalletHandler());
   }
+
+  const setWallet = ({
+    address,
+    connected,
+  }: // balanceInEth,
+  // balanceInAlexToken,
+  WalletData) => {
+    const walletData: WalletData = {
+      address: address,
+      // balanceInEth: balanceInEth,
+      // balanceInAlexToken: balanceInAlexToken,
+      connected: connected,
+    };
+
+    localStorage.setItem("walletData", JSON.stringify(walletData));
+  };
 
   const connectWalletHandler = async () => {
     if (window.ethereum && window.ethereum.isMetaMask) {
@@ -75,24 +83,42 @@ const MainPage = () => {
         const walletAddresses = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        console.log("Wallets:", walletAddresses);
 
         accountChangeHandler(walletAddresses[0]);
       } catch (error) {
-        console.log("Error:", error);
+        console.log("Error while connecting Metamask:", error);
+        toast({
+          title: "Error While Connecting Metamask",
+          description: "Please Check Your MetaMask Wallet!",
+          variant: "default",
+          className: "bg-red-500 text-white border-none",
+        });
       }
     } else {
-      console.log("Please install MetaMask browser extension to interact");
+      toast({
+        title: "Wallet Not Found",
+        description: "Please install MetaMask browser extension to interact!",
+        variant: "default",
+        className: "bg-red-500 text-white border-none",
+      });
     }
   };
 
   const accountChangeHandler = async (account: string) => {
     setWalletAddress(account);
-    getUserBalance(account);
-    fetchEthPriceInUSD();
+    getWalletBalance(account);
+    getAlexTokenBalance(account);
+    setWallet({
+      address: account,
+      // balanceInEth: walletBalance,
+      // balanceInAlexToken: alexTokenBalance,
+      connected: true,
+    });
+
+    fetchCryptoPricesInUSD();
   };
 
-  const getUserBalance = async (address: string) => {
+  const getWalletBalance = async (account: string) => {
     if (!window.ethereum) {
       console.log("Error while connecting Metamask. MetaMask is not installed");
       return;
@@ -100,24 +126,34 @@ const MainPage = () => {
     try {
       const balance = await window.ethereum.request({
         method: "eth_getBalance",
-        params: [address, "latest"],
+        params: [account, "latest"],
       });
 
-      // console.log("Balance:", balance);
       setWalletBalance(ethers.formatUnits(balance));
-      setWalletConnected(true);
-      setWallet({
-        address: address,
-        balance: ethers.formatUnits(balance),
-        connected: true,
-      });
     } catch (error) {
       console.log("Error:", error);
     }
   };
 
-  const fetchEthPriceInUSD = async () => {
+  const getAlexTokenBalance = async (account: string) => {
+    if (!window.ethereum) {
+      console.log(
+        "Error while connecting Metamask. MetaMask is not installed or wallet address is not set"
+      );
+      return;
+    }
+
+    try {
+      const balance: string = await alexToken.methods.balanceOf(account).call();
+      setAlexTokenBalance(ethers.formatUnits(balance));
+    } catch (error) {
+      console.error("Error fetching AlexToken balance:", error);
+    }
+  };
+
+  const fetchCryptoPricesInUSD = async () => {
     setEthPriceInUSD(2646);
+    setAlexTokenPriceInUSD(0.1);
     // try {
     //   const response = await fetch(
     //     "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
@@ -142,6 +178,7 @@ const MainPage = () => {
             walletConnected={walletConnected}
             walletAddress={walletAddress}
             walletBalance={walletBalance}
+            alexTokenBalance={alexTokenBalance}
             walletBalanceInUSD={walletBalanceInUSD}
             connectWalletHandler={connectWalletHandler}
           />
@@ -155,48 +192,3 @@ const MainPage = () => {
 };
 
 export default MainPage;
-
-///temp code
-{
-  /* <div className="flex flex-col items-center justify-center gap-6">
-          <Input
-            label="Message"
-            placeholder="Enter message"
-            value={tweetMessage}
-            onValueChange={setTweetMessage}
-            className="w-full bg-white text-lg rounded-lg"
-          />
-
-          <Button
-            onClick={() => {
-              handleTweetCreation({
-                walletAddress,
-                tweetMessage,
-                setTweetDictionary,
-                setTweetMessage,
-              });
-            }}
-            className="bg-white text-xl w-1/3 font-semibold px-4 py-2 rounded-lg"
-          >
-            Create Tweet
-          </Button>
-        </div>
-        <div className="text-black">
-          Here will be news/ transactions/ NFT suggestions
-        </div>
-
-        <BurnTokens />
-
-        <div className="h-fit flex flex-col gap-4 p-4 bg-[#86b1f7] rounded-lg">
-          {tweetDictionary &&
-            tweetDictionary.map((tweet, index) => (
-              <TweetCard
-                key={index}
-                walletAddress={tweet.author}
-                content={tweet.content}
-                timestamp={tweet.timestamp}
-              />
-            ))}
-        </div>
-      </div> */
-}

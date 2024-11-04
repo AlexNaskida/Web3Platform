@@ -6,17 +6,15 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract AlexToken is ERC20, Ownable {
     uint256 private _totalSupply;
-    uint256 public constant INITIAL_SUPPLY =  5000000 * 10 ** 18;
-    uint256 public constant MAX_SUPPLY = 10000000 * 10 ** 18;
+    uint256 public constant MAX_SUPPLY = 10000000 * 10 ** 18; // 10MM
     
     event TokensBurned(address indexed burner, uint256 amount);
     event TokensMinted(address indexed to, uint256 amount);
 
-    constructor() ERC20("Alex Token", "AT") Ownable(msg.sender) {
+    constructor(uint256 INITIAL_SUPPLY) ERC20("Alex Token", "AT") Ownable(msg.sender) {
         _mint(msg.sender, INITIAL_SUPPLY);
         _totalSupply = INITIAL_SUPPLY;
     }
-
 
     function mint(address to, uint256 amount) public onlyOwner {
         require(_totalSupply + amount <= MAX_SUPPLY, "Would exceed max supply");

@@ -3,7 +3,7 @@ import React from 'react'
 const CryptoInPercentPortfolio = () => {
   return (
     <div>
-      // CIRCLE GRAPH
+      {/* // CIRCLE GRAPH */}
     </div>
   )
 }
