@@ -1,13 +1,12 @@
 from sqlalchemy import Column, Boolean, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from database import PkBase
 
 
 
-class User(Base):
+class User(PkBase):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     email = Column(String, unique=True, index=True)
     password = Column(String(60))
@@ -16,18 +15,16 @@ class User(Base):
     cookies = relationship("Cookies", back_populates="user")
 
 
-class Wallet(Base):
+class Wallet(PkBase):
     __tablename__ = 'crypto_wallets'
 
-    id = Column(Integer, primary_key=True, index=True)
     wallet_address = Column(String, unique=True)
     wallet_balance = Column(Integer)
     wallet_id = Column(Integer, ForeignKey('users.id'))
 
-class Cookies(Base):
+
+class Cookies(PkBase):
     __tablename__ = 'cookies'
 
-    cookie_id = Column(Integer, primary_key=True, index=True)
-    cookie_value = Column(Integer, ForeignKey('users.id'))
-
-    user = relationship("User", back_populates="cookies")
+    cookie_value = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
