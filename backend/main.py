@@ -64,9 +64,16 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
         if bcrypt.checkpw(user.password.encode('utf-8'), stored_password):
             session_id = secrets.token_urlsafe(32)
 
-            #  Save cookie to database that created in models.py
-            
-            print("Session ID: ", session_id)
+            # Save cookie to the database
+            new_session = models.Cookies(
+                user_id=existing_user.id,
+                cookie_value=session_id
+            )
+
+            db.add(new_session)
+            db.commit()
+            db.refresh(new_session)
+
             response.set_cookie(
                 key="cookie",
                 value=session_id,
@@ -76,6 +83,7 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
                 max_age=1800,
                 path="/"
             )
+
             return {"status": 200, "detail": "User authenticated successfully"}
         else:
             raise HTTPException(
@@ -90,7 +98,7 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
         )
 
 
-#  Not used now.
+#  Not used for now.
 def check_auth(session_id: str = Cookie(None), db: Session = Depends(get_db)):
     if not session_id:
         raise HTTPException(
@@ -123,7 +131,7 @@ def check_auth(session_id: str = Cookie(None), db: Session = Depends(get_db)):
 
 
 @app.post("/logout")
-async def logout(response: Response, session_id: str = Cookie(default=None, alias="cookie")): # Alias is used to rename the cookie
+async def logout(response: Response, session_id: str = Cookie(default=None, alias="cookie"), db: Session = Depends(get_db)): # Alias is used to rename the cookie
     print("Session ID: ", session_id)
     if not session_id:
         raise HTTPException(
@@ -131,6 +139,12 @@ async def logout(response: Response, session_id: str = Cookie(default=None, alia
             detail="Not authenticated"
         )
     try:
+        db.query(models.Cookies).filter(
+            models.Cookies.cookie_value == session_id
+        ).delete()
+        db.commit()
+        
+
         response.delete_cookie(
             key="cookie",
             path="/",
