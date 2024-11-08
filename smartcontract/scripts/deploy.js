@@ -1,8 +1,7 @@
 const hre = require("hardhat"); // not used
 
 async function main() {
-  console.log(await ethers.getSigners());
-  [owner] = await ethers.getSigners();
+  [owner, wallet1] = await ethers.getSigners();
 
   const SmartContract = await ethers.getContractFactory("SmartContract", owner);
   const AlexToken = await ethers.getContractFactory("AlexToken", owner);
@@ -21,11 +20,23 @@ async function main() {
   console.log("Save this addresses to use in your interaction scripts!\n");
 
   owner_balance = await alexToken.balanceOf(owner.address);
+
+  async function mintTokens(to, amount) {
+    const tx = await alexToken.mint(to, amount);
+    await tx.wait();
+    console.log(`Minted ${amount} tokens to ${to}`);
+  }
+
+  const recipientAddress = wallet1.address;
+  const amountToMint = ethers.parseUnits("1000", 18);
+
   console.log(
     "Owner has: ",
     owner_balance.toString() / 10 ** 18,
     "amount of Alex Tokens"
   );
+
+  mintTokens(recipientAddress, amountToMint);
 
   // const mintAmount = ethers.parseUnits("2000", 18);
 

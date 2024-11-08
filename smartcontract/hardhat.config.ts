@@ -48,6 +48,9 @@ const config: HardhatUserConfig = {
           balance: "0",
         }, // Account 7 0 ETH
       ],
+      // mining: {
+      //   auto: false, // Disable automining
+      // },
     },
   },
 };
