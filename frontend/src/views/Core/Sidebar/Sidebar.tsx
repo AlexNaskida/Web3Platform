@@ -1,5 +1,5 @@
 import SideMenu from "@/components/Button/SideMenu";
-import Logout from "@/views/Auth/Logout";
+
 import {
   LayoutGrid,
   Settings,
@@ -45,9 +45,6 @@ const Sidebar = () => {
             text="Settings"
             icon={<Settings size={22} strokeWidth={2.5} />}
           />
-        </div>
-        <div className="pb-5">
-          <Logout />
         </div>
       </div>
     </div>

@@ -5,9 +5,6 @@ import CoreLayout from "@/views/Core/Sidebar/Layout";
 
 import MainPage from "@/views/MainPage/MainPage";
 
-import Login from "@/views/Auth/Login";
-import Register from "@/views/Auth/Register";
-
 import NotFound from "@/views/Error/NotFound";
 
 export const router = createBrowserRouter([
@@ -43,16 +40,6 @@ export const router = createBrowserRouter([
   //   errorElement: <NotFound />,
   //   children: [{ index: true, element: <Register /> }],
   // },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-    errorElement: <NotFound />,
-  },
 ]);
 
 export default router;

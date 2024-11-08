@@ -1,27 +1,22 @@
+import { useContext } from "react";
+import { MainContext } from "@/views/MainPage/MainContext";
 import { Button } from "@nextui-org/react";
 import DisplayWalletCard from "@/components/Cards/DisplayWalletCard";
 
-interface CryptoWalletProps {
-  walletConnected: boolean;
-  walletAddress: string;
-  walletBalance: string;
-  walletBalanceInUSD: string;
-  alexTokenBalance: string;
-  connectWalletHandler: () => void;
-}
+const CryptoWallet = () => {
+  const {
+    walletConnected,
+    walletAddress,
+    walletBalance,
+    alexTokenBalance,
+    walletBalanceInUSD,
+    connectWalletHandler,
+  } = useContext(MainContext);
 
-const CryptoWallet = ({
-  walletConnected,
-  walletAddress,
-  walletBalance,
-  alexTokenBalance,
-  walletBalanceInUSD,
-  connectWalletHandler,
-}: CryptoWalletProps) => {
   return (
     <div className="flex flex-row h-72 pr-10 w-full justify-between">
       <div className="flex flex-col w-full h-full bg-primary rounded-xl text-black">
-        {walletConnected ? (
+        {walletConnected && walletBalanceInUSD !== "NaN" ? (
           <>
             <DisplayWalletCard
               walletAddress={walletAddress}
@@ -41,8 +36,6 @@ const CryptoWallet = ({
           </div>
         )}
       </div>
-
-      {/* <CryptoPriceCards /> */}
     </div>
   );
 };
