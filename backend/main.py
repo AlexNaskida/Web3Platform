@@ -2,14 +2,14 @@ from fastapi import FastAPI, HTTPException, status, Cookie, Request, Response, D
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from database import engine, SessionLocal
+from database import engine, SessionLocal, Base
 from pydantic import BaseModel
 import models
 import secrets
 import bcrypt
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 class UserLogin(BaseModel):
     email: str
@@ -69,11 +69,10 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
                 user_id=existing_user.id,
                 cookie_value=session_id
             )
-
             db.add(new_session)
             db.commit()
+            print("Session ID: ", new_session.cookie_value)
             db.refresh(new_session)
-
             response.set_cookie(
                 key="cookie",
                 value=session_id,
@@ -87,7 +86,7 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
             return {"status": 200, "detail": "User authenticated successfully"}
         else:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect email or password"
             )
         
@@ -96,7 +95,6 @@ async def login(user: UserLogin, response: Response, db: Session = Depends(get_d
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Invalid password hash stored in database"
         )
-
 
 #  Not used for now.
 def check_auth(session_id: str = Cookie(None), db: Session = Depends(get_db)):

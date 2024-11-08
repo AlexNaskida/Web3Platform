@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, UUID
 
+
 class Base(DeclarativeBase):
     pass
 
