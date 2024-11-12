@@ -43,5 +43,6 @@ contract Staking {
         accountBalances[msg.sender][symbol] -= amount;
         ERC20(whiteListedTokens[symbol]).transfer(msg.sender, amount);
     }
+    
 
 }

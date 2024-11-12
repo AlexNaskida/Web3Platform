@@ -22,7 +22,7 @@ contract AlexToken is ERC20 {
         _;
     }
 
-    function mint(address to, uint256 amount) public onlyOwner {
+    function mint(address to, uint256 amount)  public  onlyOwner {
         require(_totalSupply + amount <= MAX_SUPPLY, "Would exceed max supply");
         require(to != address(0), "Cannot mint to zero address");
         require(amount > 0, "Amount must be greater than 0");
@@ -46,5 +46,6 @@ contract AlexToken is ERC20 {
     function getCurrentSupply() public view returns (uint256) {
         return _totalSupply;
     }
-
+    receive() external payable {}
+    fallback() external payable {}
 }

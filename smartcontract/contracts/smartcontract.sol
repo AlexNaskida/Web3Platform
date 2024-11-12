@@ -15,6 +15,9 @@ contract SmartContract {
     event Transcation(address sender, address receiver, uint256 amount);
     event Mint(address sender, address receiver, uint256 amount);
     event Burn(address sender, address receiver, uint256 amount);
+
+    event FundsReceived(address sender, uint256 amount);
+
     
     constructor() {
         owner = payable(msg.sender);
@@ -95,4 +98,11 @@ contract SmartContract {
         emit Burn(msg.sender, address(0), _amount);
     }
 
+    fallback() external payable {
+        emit FundsReceived(msg.sender, msg.value);
+    }
+
+    receive() external payable {
+        emit FundsReceived(msg.sender, msg.value);
+    }
 }

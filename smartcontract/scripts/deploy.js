@@ -15,26 +15,18 @@ async function main() {
   await alexToken.waitForDeployment();
 
   console.log("\nOwner of the SmartContract is:", owner.address);
+  console.log("Wallet1 Address:", wallet1.address);
   console.log("SmartContract deployed to:", await smartContract.getAddress());
   console.log("AlexToken deployed to:", await alexToken.getAddress());
   console.log("Save this addresses to use in your interaction scripts!\n");
 
-  owner_balance = await alexToken.balanceOf(owner.address);
-
   async function mintTokens(to, amount) {
     const tx = await alexToken.mint(to, amount);
     await tx.wait();
-    console.log(`Minted ${amount} tokens to ${to}`);
   }
 
   const recipientAddress = wallet1.address;
   const amountToMint = ethers.parseUnits("1000", 18);
-
-  console.log(
-    "Owner has: ",
-    owner_balance.toString() / 10 ** 18,
-    "amount of Alex Tokens"
-  );
 
   mintTokens(recipientAddress, amountToMint);
 
