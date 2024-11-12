@@ -1,5 +1,5 @@
 import SideMenu from "@/components/Button/SideMenu";
-
+import { Image } from "@nextui-org/react";
 import {
   LayoutGrid,
   Settings,
@@ -11,11 +11,12 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="flex flex-col gap-10 bg-foreground w-72 p-4">
+    <div className="flex flex-col gap-10 bg-foreground min-w-72 p-4">
       <Link to="/">
-        <div className="flex justify-center items-center h-12 ">
+        <div className="flex flex-row gap-4 justify-center items-center h-12">
+          <Image src="/CryptoCoin.svg" width={55} height={55} />
           <h1 className="text-center text-black text-2xl font-bold">
-            Crypto Platform
+            CryptoCoin
           </h1>
         </div>
       </Link>

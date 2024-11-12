@@ -1,46 +1,71 @@
+import React, { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
-// import { useState } from "react";
+import ExchangeMenu from "@/components/Button/ExchangeMenu";
+import { Button } from "@nextui-org/button";
 
-const CryptoExchange = () => {
-  //   const [BitcoinPrice, setBitcoinPrice] = useState<number>(0);
-  const BitcoinPrice = "60000$";
-  const EthereumPrice = "4000$";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const CryptoExchange: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<"buy" | "sell" | "swap">("swap");
+  const [selectedToken, setSelectedToken] = useState("Ethereum");
 
   return (
-    <div className="flex flex-col h-fit text-muted-foreground justify-between gap-8 border border-border rounded-lg p-8">
-      <p className="text-xl font-medium">Exchange</p>
-      <div className="flex flex-col h-full">
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row gap-4">
-            <div className="size-12 bg-white rounded-full border-3 border-orange-600" />
-            <div className="flex flex-col">
-              <p className="text-md font-medium">BTC</p>
-              <p className="text-sm font-medium">1 BTC = {BitcoinPrice}</p>
-            </div>
-          </div>
-          <p className="text-2xl">0.40</p>
-          <p className="text-xs">15,000$</p>
+    <div className="flex flex-col h-fit items-center text-muted-foreground gap-4 border-3 border-primary rounded-lg p-8">
+      <p className="text-xl font-medium text-start w-full">Exchange</p>
+      <div className="w-full h-[2px] bg-black" />
+      <div className="flex flex-col h-96 gap-4 w-full">
+        <div className="flex flex-row justify-start gap-2">
+          <ExchangeMenu
+            text="Buy"
+            isActive={activeTab === "buy"}
+            onClick={() => setActiveTab("buy")}
+          />
+          <ExchangeMenu
+            text="Sell"
+            isActive={activeTab === "sell"}
+            onClick={() => setActiveTab("sell")}
+          />
+          <ExchangeMenu
+            text="Swap"
+            isActive={activeTab === "swap"}
+            onClick={() => setActiveTab("swap")}
+          />
         </div>
 
-        <div className="flex flex-row justify-center items-center">
-          <div className="w-full h-[1px] bg-white" />
-          <div className="p-1 size-fit bg-white rounded-full">
-            <ArrowUpDown size={23} className="text-black" />
+        {activeTab === "swap" && (
+          <div className="flex flex-col justify-center items-center gap-2">
+            {/* <div className="bg-slate-100 w-full h-10 rounded-md"> */}
+            <Select onValueChange={setSelectedToken} value={selectedToken}>
+              <SelectTrigger className="bg-slate-100 h-10 rounded-md w-full">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Ethereum">Ethereum</SelectItem>
+                <SelectItem value="Alex Token">Alex Token</SelectItem>
+                <SelectItem value="Polygon">Polygon</SelectItem>
+              </SelectContent>
+            </Select>
+            {/* </div> */}
+            <div className="bg-slate-100 w-full h-16 rounded-md"></div>
+            <ArrowUpDown
+              size={16}
+              className="size-8 p-2 bg-slate-100 rounded-full"
+            />
+            <div className="bg-slate-100 w-full h-16 rounded-md"></div>
           </div>
-          <div className="w-full h-[1px] bg-white" />
-        </div>
+        )}
 
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row gap-4">
-            <div className="size-12 bg-white rounded-full border-3 border-orange-600" />
-            <div className="flex flex-col">
-              <p className="text-md font-medium">ETH</p>
-              <p className="text-sm font-medium">1 ETH = {EthereumPrice}</p>
-            </div>
-          </div>
-          <p className="text-2xl">14</p>
-          <p className="text-xs">1,130.01$</p>
-        </div>
+        <Button className="bg-primary text-white font-semibold rounded-2xl text-md">
+          {activeTab === "swap" && <p>Swap</p>}
+          {activeTab === "buy" && <p>Buy</p>}
+          {activeTab === "sell" && <p>Sell</p>}
+        </Button>
       </div>
     </div>
   );

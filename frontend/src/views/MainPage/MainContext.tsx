@@ -18,6 +18,7 @@ export const MainContext = createContext<{
   alexTokenBalance: string;
   walletBalanceInUSD: string;
   connectWalletHandler: () => Promise<void>;
+  disconnectWallet: () => Promise<void>;
 }>({
   walletConnected: false,
   walletAddress: "",
@@ -25,6 +26,7 @@ export const MainContext = createContext<{
   alexTokenBalance: "",
   walletBalanceInUSD: "",
   connectWalletHandler: async () => {},
+  disconnectWallet: async () => {},
 });
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
@@ -84,16 +86,29 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("walletData", JSON.stringify(walletData));
   };
 
+  const disconnectWallet = async () => {
+    localStorage.removeItem("walletData");
+    setWalletConnected(false);
+    setWalletAddress("");
+    setWalletBalance("");
+    setAlexTokenBalance("");
+    setWalletBalance("");
+    toast({
+      title: "Wallet Disconnected Successfully",
+      variant: "default",
+      className: "bg-green-400 text-white border-none",
+    });
+  };
+
   const connectWalletHandler = async () => {
-    console.log(walletBalanceInUSD);
-    if (walletBalanceInUSD !== "NaN") {
-      toast({
-        title: "Something With Metamask",
-        description: "We are Trying to Your Wallet!",
-        variant: "default",
-        className: "bg-orange-400 text-white border-none",
-      });
-    }
+    // if (walletBalanceInUSD !== "NaN") {
+    //   toast({
+    //     title: "Something with Metamask",
+    //     description: "We are Trying to Your Wallet!",
+    //     variant: "default",
+    //     className: "bg-orange-400 text-white border-none",
+    //   });
+    // }
     if (window.ethereum && window.ethereum.isMetaMask) {
       try {
         const walletAddresses = await window.ethereum.request({
@@ -124,6 +139,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     setWalletAddress(account);
     getWalletBalance(account);
     getAlexTokenBalance(account);
+    setWalletConnected(true);
     setWallet({
       address: account,
       // balanceInEth: walletBalance,
@@ -168,8 +184,8 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchCryptoPricesInUSD = async () => {
-    setEthPriceInUSD(2646);
-    setAlexTokenPriceInUSD(0.1);
+    setEthPriceInUSD(3051);
+    setAlexTokenPriceInUSD(2.1);
     // try {
     //   const response = await fetch(
     //     "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
@@ -181,7 +197,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     //   return null;
     // }
   };
-  
+
   return (
     <MainContext.Provider
       value={{
@@ -191,6 +207,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
         alexTokenBalance,
         walletBalanceInUSD,
         connectWalletHandler,
+        disconnectWallet,
       }}
     >
       {children}
