@@ -6,8 +6,6 @@ contract SmartContract {
 
     // delete this later and move to transfering ETH,( this is what payable is for)
     // Create Total Supply 
-    mapping(address => uint) public balances;
-
     event ConstructorCalled(address indexed _owner);
     event messageCreatedEvent(uint256 id, address author, string content, uint256 timestamp);
     event messageLikeEvent(address liker, address tweetAuthor, uint256 tweetId, uint256 newLikeCount);
@@ -16,8 +14,8 @@ contract SmartContract {
     event Mint(address sender, address receiver, uint256 amount);
     event Burn(address sender, address receiver, uint256 amount);
 
-    event FundsReceived(address sender, uint256 amount);
-
+    event TransferReceived(address indexed sender, uint amount);
+    event TransferSent(address indexed recipient, uint256 amount, string message);
     
     constructor() {
         owner = payable(msg.sender);
@@ -73,36 +71,18 @@ contract SmartContract {
     }
 
     // working with money
-    function transfer(address _to, uint256 _amount) public payable {
-        require(balances[msg.sender] >= _amount, "Insufficient balance");
-    
-        balances[msg.sender] -= _amount;
-        balances[_to] += _amount;
+    function transferEth(address payable _recipient, string memory _message) public payable {
+        require(msg.value > 0, "Transfer amount must be greater than 0");
+        
+        // Transfer ETH
+        (bool success, ) = _recipient.call{value: msg.value}("");
+        require(success, "Transfer failed");
 
-        emit Transcation(msg.sender, _to, _amount);
-    }
-
-    function mint(address _account, uint256 _amount) public onlyOwner payable {
-        require(_account != address(0), "Mint to the zero address");
-        balances[_account] += _amount;
-
-        emit Mint(msg.sender, address(0), _amount);
-
-    }
-
-    function burn(uint256 _amount) public onlyOwner {
-        require(msg.sender != address(0), "Burn from the zero address");
-        require(balances[msg.sender] >= _amount, "Burn amount exceeds balance");
-        balances[msg.sender] -= _amount;
-    
-        emit Burn(msg.sender, address(0), _amount);
-    }
-
-    fallback() external payable {
-        emit FundsReceived(msg.sender, msg.value);
+        // Emit transfer event with the message
+        emit TransferSent(_recipient, msg.value, _message);
     }
 
     receive() external payable {
-        emit FundsReceived(msg.sender, msg.value);
+        emit TransferReceived(msg.sender, msg.value);
     }
 }

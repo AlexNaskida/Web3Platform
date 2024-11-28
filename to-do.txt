@@ -1,0 +1,13 @@
+Write a swapping smartcontract that swaps ETH for AlexToken
+
+Write a transaction smartcontract for AlexToken
+
+Write a Staking smartcontract for AlexToken
+
+Write a fake trading page
+
+Write a NFT smartcontract
+
+Generate a QR code for recieving the token and use smartphone
+
+Support Sending Other Currencies to other wallets

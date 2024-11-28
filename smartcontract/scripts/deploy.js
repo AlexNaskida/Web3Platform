@@ -1,7 +1,7 @@
 const hre = require("hardhat"); // not used
 
 async function main() {
-  [owner, wallet1] = await ethers.getSigners();
+  [owner, wallet1, wallet2] = await ethers.getSigners();
 
   const SmartContract = await ethers.getContractFactory("SmartContract", owner);
   const AlexToken = await ethers.getContractFactory("AlexToken", owner);
@@ -16,6 +16,7 @@ async function main() {
 
   console.log("\nOwner of the SmartContract is:", owner.address);
   console.log("Wallet1 Address:", wallet1.address);
+  console.log("Wallet2 Address:", wallet2.address);
   console.log("SmartContract deployed to:", await smartContract.getAddress());
   console.log("AlexToken deployed to:", await alexToken.getAddress());
   console.log("Save this addresses to use in your interaction scripts!\n");
