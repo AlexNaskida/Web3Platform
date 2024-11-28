@@ -12,12 +12,13 @@ from database import PkBase
 
 class Wallet(PkBase):
     __tablename__ = 'crypto_wallets'
-    wallet_address = Column(String, unique=True)
-    wallet_balance = Column(Integer)
-    wallet_id = Column(Integer, ForeignKey('users.id'))
 
-class Cookies(PkBase):
-    __tablename__ = 'cookies'
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    cookie_value = Column(String, nullable=False)
+    wallet_address = Column(String, unique=True)
+    wallet_balance = Column(String)
+    wallet_AlexToken_balance  = Column(String)  
+    
+# class Cookies(PkBase):
+#     __tablename__ = 'cookies'
+#     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+#     cookie_value = Column(String, nullable=False)
 
