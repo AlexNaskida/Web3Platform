@@ -44,5 +44,4 @@ contract Staking {
         ERC20(whiteListedTokens[symbol]).transfer(msg.sender, amount);
     }
     
-
 }
