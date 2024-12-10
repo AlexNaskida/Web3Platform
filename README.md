@@ -91,24 +91,4 @@ To get started with Crypto Platfrom Project, follow these steps:
 
     Note: Double check the contract address. Compare them to the address written in src/constants/constant.ts file
 
-## Usage
-
-To run the application, use the following command:
-
-```bash
-npm start
-```
-
-## Contributing
-
-We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
-## Contact
-
-If you have any questions or feedback, feel free to reach out to us at [your email address].
-
-Thank you for using Our Platform!
+### Start Exploring
