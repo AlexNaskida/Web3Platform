@@ -1,7 +1,8 @@
 import { UserRound } from "lucide-react";
 import { Image } from "@nextui-org/react";
 import { useContext } from "react";
-import { MainContext } from "@/views/MainPage/MainContext";
+import { useLocation } from "react-router-dom";
+import { MainContext } from "@/views/Core/components/MainContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -22,14 +23,24 @@ import {
 } from "@/components/ui/popover";
 
 const MainHeader = () => {
-  const { toast } = useToast();
-
   const {
     walletAddress,
     walletConnected,
     connectWalletHandler,
     disconnectWallet,
   } = useContext(MainContext);
+
+  const location = useLocation();
+  const { toast } = useToast();
+
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case "/nft":
+        return "NFT Market Place";
+      default:
+        return "Dashboard";
+    }
+  };
 
   const formatWalletAddress = (walletAddress: string) => {
     return `${walletAddress.slice(0, 10)}...${walletAddress.slice(-5)}`;
@@ -48,6 +59,10 @@ const MainHeader = () => {
   const Profile = () =>
     walletConnected ? (
       <div className="flex flex-col items-center gap-2">
+        <p className="text-center text-lg font-bold">Coming Soon</p>
+      </div>
+    ) : (
+      <div className="flex flex-col items-center gap-2">
         <p className="text-lg font-semibold text-center">
           Connect your wallet first to view settings
         </p>
@@ -55,16 +70,12 @@ const MainHeader = () => {
           Connect
         </Button>
       </div>
-    ) : (
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-center text-lg font-bold">Coming Soon</p>
-      </div>
     );
 
   return (
     <div className="flex flex-row w-full justify-between">
       <div className="flex items-center p-4 h-12">
-        <p className="text-2xl text-black font-bold">Dashboard</p>
+        <p className="text-2xl text-black font-bold">{getPageTitle()}</p>
       </div>
       <div className="flex flex-row w-2/5 justify-end gap-5">
         {!walletConnected ? (

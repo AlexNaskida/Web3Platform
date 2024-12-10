@@ -1,7 +1,7 @@
 // import { contract } from "@/constants/constant";
 // import { ethers } from "ethers";
 
-// export const contrctApiInstance = axios.create({
+// export const contractApiInstance = axios.create({
 //   baseURL: `http://localhost:8000`,
 //   withCredentials: true,
 //   headers: {

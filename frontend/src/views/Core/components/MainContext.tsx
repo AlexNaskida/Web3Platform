@@ -18,6 +18,7 @@ export type SaveWalletDataProps = {
   wallet_balance: string;
   wallet_AlexToken_balance: string;
 };
+
 export const MainContext = createContext<{
   walletConnected: boolean;
   walletAddress: string;
@@ -76,7 +77,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   if (window.ethereum) {
     window.ethereum.on("accountsChanged", () => connectWalletHandler());
   }
-
   const setWallet = ({
     address,
     connected,
@@ -99,6 +99,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     setWalletAddress("");
     setWalletBalance("");
     setAlexTokenBalance("");
+    setWalletBalanceInUSD("");
     setWalletBalance("");
     toast({
       title: "Wallet Disconnected Successfully",
@@ -178,6 +179,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
           wallet_balance: walletEthBalance,
           wallet_AlexToken_balance: walletAlexTokenBalance,
         });
+
         if (success !== null) {
           setWalletConnected(true);
         }
@@ -235,16 +237,17 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchCryptoPricesInUSD = async () => {
-    setEthPriceInUSD(3301);
     setAlexTokenPriceInUSD(2.188);
+    setEthPriceInUSD(3900);
+
     // try {
     //   const response = await fetch(
     //     "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
     //   );
     //   const data = await response.json();
     //   setEthPriceInUSD(data.ethereum.usd);
-    // } catch (error) {
-    //   console.error("Error fetching ETH price:", error);
+    // } catch  {
+    //   setEthPriceInUSD(4000);
     //   return null;
     // }
   };

@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import { MainContext } from "@/views/MainPage/MainContext";
+import { MainContext } from "@/views/Core/components/MainContext";
 import { Button } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 
@@ -13,6 +13,7 @@ const CryptoWalletDashboard = () => {
     walletBalanceInUSD,
     connectWalletHandler,
   } = useContext(MainContext);
+  
   const formatNumberWithCommas = (number: string) => {
     if (number === "NaN") {
       return "0";

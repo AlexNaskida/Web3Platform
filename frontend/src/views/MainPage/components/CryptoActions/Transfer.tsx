@@ -4,8 +4,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
+// Create Web3 instance
 import { useContext, useState } from "react";
-import { MainContext } from "@/views/MainPage/MainContext";
+import { MainContext } from "@/views/Core/components/MainContext";
+import { useToast } from "@/hooks/use-toast";
 
 import { contract, alexTokenContract } from "@/constants/constant";
 import { ethers } from "ethers";
@@ -19,6 +21,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 import {
@@ -52,6 +55,8 @@ const TransactionFormSchema = z.object({
 type TransactionFormFields = z.infer<typeof TransactionFormSchema>;
 
 const Transfer = () => {
+  const { toast } = useToast();
+
   const { walletAddress, walletBalance, alexTokenBalance } =
     useContext(MainContext);
   const [tokenToTransfer, setTokenToTransfer] = useState("Ethereum");
@@ -107,22 +112,56 @@ const Transfer = () => {
             from: walletAddress,
             value: ethers.parseEther(data.amount).toString(),
           });
-        console.log(tx);
+
+        const transactionStatus = tx.status.toString();
+
+        if (transactionStatus === "1") {
+          toast({
+            title: "Transaction Successfully Proceeded",
+            variant: "default",
+            className: "bg-green-400 text-white border-none",
+          });
+        } else {
+          toast({
+            title: "Transaction Failed",
+            variant: "default",
+            className: "bg-red-400 text-white border-none",
+          });
+        }
       } else if (tokenToTransfer === "AlexToken") {
         // console.log(typeof data.amount);
         const tx = await alexTokenContract.methods.transfer(
           data.walletAddress,
           ethers.parseUnits(data.amount, 18).toString()
         );
-        console.log(tx);
-      }
 
-      console.log("Transfer successful!");
+        console.log(tx);
+        // const transactionStatus = tx.status.toString();
+
+        // if (transactionStatus === "1") {
+        //   toast({
+        //     title: "Transaction Successfully Proceeded",
+        //     variant: "default",
+        //     className: "bg-green-400 text-white border-none",
+        //   });
+        //
+        // } else {
+        //   toast({
+        //     title: "Transaction Failed",
+        //     variant: "default",
+        //     className: "bg-red-400 text-white border-none",
+        //   });
+        //   console.log("Transfer failed");
+        // }
+        // setIsDialogOpen(true)
+      }
     } catch (err) {
       console.error("Transaction failed:", err);
-      setError("walletAddress", {
-        message:
-          "Transaction failed. Please check the wallet address and try again.",
+      toast({
+        title: "Transaction Failed",
+        description: "Smartcontract is Having Some Problems. Please Try Later.",
+        variant: "default",
+        className: "bg-red-400 text-white border-none",
       });
     }
   };
@@ -227,9 +266,11 @@ const Transfer = () => {
           </div>
 
           <DialogFooter>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Processing..." : "Transfer"}
-            </Button>
+            <DialogClose asChild>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Processing..." : "Transfer"}
+              </Button>
+            </DialogClose>
           </DialogFooter>
         </form>
       </DialogContent>
