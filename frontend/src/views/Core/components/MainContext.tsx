@@ -130,14 +130,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const connectWalletHandler = async () => {
-    // if (walletBalanceInUSD !== "NaN") {
-    //   toast({
-    //     title: "Something with Metamask",
-    //     description: "We are Trying to Your Wallet!",
-    //     variant: "default",
-    //     className: "bg-orange-400 text-white border-none",
-    //   });
-    // }
     if (window.ethereum && window.ethereum.isMetaMask) {
       try {
         const walletAddresses = await window.ethereum.request({
@@ -168,10 +160,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     setWalletAddress(account);
     const walletEthBalance = await getWalletBalance(account);
     const walletAlexTokenBalance = await getAlexTokenBalance(account);
-    // console.log("account: ", typeof account);
-    // console.log("walletEthBalance: ", typeof walletEthBalance);
-    // console.log("walletAlexTokenBalance: ", typeof walletAlexTokenBalance);
-
+  
     try {
       if (walletEthBalance && walletAlexTokenBalance) {
         const success = await saveWalletData({
@@ -237,19 +226,18 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchCryptoPricesInUSD = async () => {
-    setAlexTokenPriceInUSD(2.188);
-    setEthPriceInUSD(3900);
-
-    // try {
-    //   const response = await fetch(
-    //     "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
-    //   );
-    //   const data = await response.json();
-    //   setEthPriceInUSD(data.ethereum.usd);
-    // } catch  {
-    //   setEthPriceInUSD(4000);
-    //   return null;
-    // }
+    setAlexTokenPriceInUSD(2.188); // Price of AlexToken is set manually
+ 
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+      );
+      const data = await response.json();
+      setEthPriceInUSD(data.ethereum.usd);
+    } catch  {
+      setEthPriceInUSD(3600);
+      return null;
+    }
   };
 
   return (
