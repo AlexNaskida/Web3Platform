@@ -1,94 +1,95 @@
-# FirstProject
+## FirstProject
 
 Welcome to Web3 World!
 
-This project is a Web3 platform, where you can buy, transfer and sell different cryptocurrencies and also trade NFTs. In future we're thinking of adding the staking contract allow users to receive rewards for putting their crypto into the secure vaults.🚀💰
+This project is a Web3 platform that enables users to engage in cryptocurrency transactions, including buying, selling, and transferring various digital assets. In the future, we intend to incorporate a staking contract, allowing users to earn rewards by depositing their cryptocurrencies into secure vaults. 🚀💰
 
 ## Features
 
-- Wallet Connection
-- Funds Manipulation (+ later swapping will be added)
-- NFT token creation
-- NFT token selling and buying on marketplace (+ maybe bidding will be introduced)
+- Wallet Integration
+- Fund Management (with the potential for future swapping functionality)
+- NFT Token Creation
+- NFT Token Trading on the Marketplace (with the possibility of introducing bidding)
 
-## How to Deploy
+## Deployment Process
 
-### Required Apps
+### Required Software
 
-- Installed IPFS
+- IPFS
 - Docker
 
-### Stages of Deployment
+### Deployment Stages
 
-To get started with Crypto Platfrom Project, follow these steps:
+For usage of Crypto Platform, follow these steps:
 
-1.  Clone the repository:
+#### Clone the repository:
 
-    ```bash
-    git clone https://github.com/AlexNaskida/Web3Platform.git
-    ```
+```bash
+git clone https://github.com/AlexNaskida/Web3Platform.git
+```
 
-2.  Fire up Frontend
+#### Launch the Frontend
 
-    #### Running the Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-    ```bash
-    cd Web3Platform/frontend
-    npm install
-    npm run dev
-    ```
+#### Installing Requirements, Launch Backend, Database, and IPFS
 
-3.  Fire up Backend + DB + IPFS
+```bash
+cd Web3Platform/smartcontract
+npm install
+```
 
-    #### Installing the requirements
+##### Running the Database
 
-    ```bash
-    cd Web3Platform/smartcontract
-    npm install
-    docker-compose up -d
-    Open the
-    ```
+```bash
+docker-compose up -d
+```
 
-    #### Running the Database
+##### Running the IPFS
 
-    ```bash
-    docker-compose up -d
-    ```
+```bash
+Run the IPFS Desktop App
+```
 
-    #### Running the IPFS
+##### Running the Backend
 
-    ```bash
-    docker-compose up -d
-    ```
+```bash
+cd backend
+python3 -m venv backend/venv
+venv\Scripts\activate (Windows)
+source venv/bin/activate (Mac/Linux)
+pip install -r requirements.txt
+uvicorn main:app —reload
+```
 
-    #### Running the Backend
+#### Compiling the Contract
 
-    ```bash
-    uvicorn main:app --reload
-    ```
+```bash
+cd smartcontract
+npm install
+npx hardhat compile
+```
 
-4.  Lauching Blockchain and Smartcontracts:
+Copy the Created JSON ABI file to the frontend’s src/assets directory.
+Then, in the smart contract directory, execute the following commands:
 
-    #### Compiling the contract
+#### Launching the Blockchain and Smart Contracts
 
-    ```bash
-    cd Web3Platform/smartcontract
-    npm install
-    npx hardhat compile
-    ```
+```bash
+npx hardhat node
+npx hardhat run scripts/deploy.js —network localhost
+```
 
-    Copy the Created JSON ABI file to the frontend src/assets directory.
-    Then in smartcontract direcotry run the following:
+This will launch the chain, deploy the tokens, and NFTs.
 
-    #### Launching the chain, tokens and NFTs
+Now you will be able to see the smart contract on the chain
 
-    ```bash
-     npx hardhat node
-     npx hardhat run scripts/deploy.js --network localhost
-    ```
+Double-check the contract address. Compare it to the address written in src/constants/constant.ts file.
 
-    Not you will be able to see the smartcontract on the chain
+Note: Some functionalities are still in development or need to be fixed
 
-    Note: Double check the contract address. Compare them to the address written in src/constants/constant.ts file
-
-### Start Exploring
+## Feel Free to Start Exploring the Platform…
