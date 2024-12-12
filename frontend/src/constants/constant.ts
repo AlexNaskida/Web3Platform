@@ -12,6 +12,7 @@ const NFTContractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 const MarketPlaceAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
 
 const web3 = new Web3("http://127.0.0.1:8545");
+// const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(contractABI.abi, contractAddress);
 const alexTokenContract = new web3.eth.Contract(
   alexTokenContractABI.abi,

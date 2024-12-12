@@ -192,9 +192,9 @@ export const NFTMarketPlaceProvider = ({
     const uri = `http://127.0.0.1:5001/ipfs/${hash}`;
 
     // Mints the NFT
-    const response = await NFTContract.methods
-      .mint(uri)
-      .send({ from: fetchUserWalletAddress() });
+    const response = await NFTContract.methods.mint(uri).send({
+      from: fetchUserWalletAddress(),
+    });
 
     console.log("Response: ", response);
 
