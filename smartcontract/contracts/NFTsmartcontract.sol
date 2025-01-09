@@ -8,8 +8,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NFTSmartContract is ERC721URIStorage, Ownable {
     uint public tokenCount;
-    
-    event NFTTransfer(uint256 tokenID, address from, address to, string tokenURI, uint256 price);
 
     constructor() ERC721("Alex's NFTs", "ANFT") {}
 
