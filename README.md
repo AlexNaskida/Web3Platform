@@ -1,4 +1,4 @@
-## FirstProject
+## Web3 Project
 
 Welcome to Web3 World!
 
